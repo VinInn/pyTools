@@ -164,7 +164,7 @@ def loop(fname) :
     c1 = TCanvas( 'c1', fname, 200, 10, 1000, 1400 )
     gStyle.SetOptStat(111111)
     gStyle.SetHistLineWidth(2)
-    c1.Divide(2,3)
+    c1.Divide(2,4)
     c1.cd(1).SetLogy()
     sip2d.DrawNormalized()
     e = TF1("q","0.5*exp(-0.5*x*x)/sqrt(6.28)",-10.,10.)
@@ -188,24 +188,25 @@ def loop(fname) :
 
     
 #    sip3d_best.DrawNormalized()
-#    c1.cd(3).SetLogy()
-#    vert.DrawNormalized()
+    c1.cd(7).SetLogy()
+    vert.DrawNormalized()
 #    ev = TF1("qv","0.2*exp(-0.5*x*x)/sqrt(6.28)",-10.,10.)
 #    ev.Draw("same")      
-#   c1.cd(4)
-#    sip_v.Draw()
+    c1.cd(8)
+    sip_v.Draw()
 
     c1.Print("sipall"+fname+".png")
 
 
-files = ["SingleMuPt10.root",
-         "Zmumu2.root",
-         "ZmumuPU502.root",
-         "ZmumuPU2.root",
-         'ZmumuPUnoDI.root',
+files = [
+#         "SingleMuPt10.root",
+#         "Zmumu2.root",
+#         "ZmumuPU502.root",
+#         "ZmumuPU2.root",
+         'ZmumuPUnoDI.root'
 #         'Zmumu5314.root',
-         'Zmumu720ph14_50.root',
-         'Zmumu720ph14.root', 
-         "ZZ4l.root"
+#         'Zmumu720ph14_50.root',
+#         'Zmumu720ph14.root', 
+#         "ZZ4l.root"
          ]
 for f in files : loop(f)
