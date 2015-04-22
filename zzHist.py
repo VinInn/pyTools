@@ -44,7 +44,8 @@ def Voigt(nu, alphaD, alphaL, nu_0, A, a=0, b=0):
 def funcV(p, x):
     # Compose the Voigt line-shape
     alphaD, alphaL, nu_0, I, a, b = p
-    return Voigt(x, alphaD, alphaL, nu_0, I, a, b)
+    scale = nu_0/91.2
+    return Voigt(x, scale*alphaD, scale*alphaL, nu_0, I, a, b)
 
 
 def residualsV(p, data):
@@ -137,8 +138,10 @@ sip3d74=[]
 for row in dm53f :
     r = row.split(',')
   #  if (float(r[2])<10) : continue
-    if (abs(float(r[6]))>1.5) : continue
-    if (abs(float(r[6+7]))>1.5) : continue
+    if (abs(float(r[5]))<15) : continue
+    if (abs(float(r[5+7]))<15) : continue
+    if (abs(float(r[6]))<1.0) : continue
+    if (abs(float(r[6+7]))<1.0) : continue
     if (abs(float(r[9]))<4 and abs(float(r[6+7]))<4) :
       mass53.append(float(r[1]))
       if (float(r[1])>87 and float(r[1])<95) : pt53.append(float(r[2]))
@@ -147,8 +150,10 @@ for row in dm53f :
 for row in dm74f :
     r = row.split(',')
  #   if (float(r[2])<10) : continue
-    if (abs(float(r[6]))>1.5) : continue
-    if (abs(float(r[6+7]))>1.5) : continue
+    if (abs(float(r[5]))<15) : continue
+    if (abs(float(r[5+7]))<15) : continue
+    if (abs(float(r[6]))<1.0) : continue
+    if (abs(float(r[6+7]))<1.0) : continue
     if (abs(float(r[9]))<4 and abs(float(r[9+7]))<4) :
       mass74.append(float(r[1]))
       if (float(r[1])>87 and float(r[1])<95) : pt74.append(float(r[2]))
@@ -156,24 +161,27 @@ for row in dm74f :
     sip3d74.append(float(r[9+7]))
 
 
-
+plt.rc('legend', fontsize=18)
 fig = plt.figure()
 ax = fig.add_subplot(111)
 #ax.set_xlim(23.5, 28)
 #ax.set_ylim(0.0001, 1.)
 ax.grid(True)
 #plt.hist([mass53,mass74],bins=np.linspace(70, 120, 100), normed=1,color=['b','r'], histtype='step',label=['53','74'])
-plt.legend(loc='upper right')
+ax.legend(loc='upper right')
 # plt.yscale('log')
 #plt.show()
 
-bin_centres, yval,err =ploterr(values=mass53,bins=np.linspace(80, 100, 50),color='b',label='53',xLabel='mumu mass (GeV)')
+ax.set_title('$\mu^+\mu^-$ Mass')
+
+bin_centres, yval,err =ploterr(values=mass53,bins=np.linspace(80, 100, 50),color='b',label='53',xLabel='$\mu^+\mu^-$ Mass (GeV)')
 alphaD, alphaL, nu_0, I, a_back, b_back = fitZshape(bin_centres, yval,err)
 f = Voigt(nu=bin_centres, alphaD=alphaD, alphaL=alphaL, nu_0=nu_0, A=I,a=a_back,b=b_back)
 plt.plot(bin_centres, f, 'g--', linewidth=1)
+ax.text(81, 0.06, '\n$Z^o$ mass = %4.2f'%nu_0+'\n$\sigma_{p_t}/p_t$ = %4.3f'%(alphaD/nu_0), fontsize=15, bbox={'facecolor':'blue', 'alpha':0.5, 'pad':10})
 
 
-bin_centres, yval,err = ploterr(values=mass74,bins=np.linspace(80, 100, 50),color='r',label='74',xLabel='mumu mass (GeV)')
+bin_centres, yval,err = ploterr(values=mass74,bins=np.linspace(80, 100, 50),color='r',label='74',xLabel='$\mu^+\mu^-$ Mass (GeV)')
 def zshape(x) :
     gamma=2.5
     x0 = 91.2
@@ -187,7 +195,10 @@ alphaD, alphaL, nu_0, I, a_back, b_back = fitZshape(bin_centres, yval,err)
 
 f = Voigt(nu=bin_centres, alphaD=alphaD, alphaL=alphaL, nu_0=nu_0, A=I,a=a_back,b=b_back)
 plt.plot(bin_centres, f, 'g--', linewidth=1)
+ax.text(81, 0.04, '\n$Z^o$ mass = %4.2f'%nu_0+'\n$\sigma_{p_t}/p_t$ = %4.3f'%(alphaD/nu_0), fontsize=15, bbox={'facecolor':'red', 'alpha':0.5, 'pad':10})
+
 plt.legend(loc='upper right')
+
 plt.show()
 
 ploterr(values=sip3d53,bins=np.linspace(-6, 6, 60),color='b',label='53',xLabel='Sip3d')
