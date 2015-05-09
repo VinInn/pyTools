@@ -13,6 +13,9 @@ quality = "highPurity"
 
 
 
+nmu=0
+nmuOnly=0
+nmuNotConf=0
 for i in range(0, eventsRef.size()):
 #for i in range(0, 200):
   a= eventsRef.to(i)
@@ -21,13 +24,17 @@ for i in range(0, eventsRef.size()):
   trVal = []
   for track in tracksRef.product():
 #   if (track.phi()<0) : continue
-#   if (track.eta()<0) : continue
-#   if (track.pt()<5) : continue
+   if (abs(track.eta())>2.3) : continue
+   if (track.pt()<4) : continue
    if (track.quality(track.qualityByName(quality))) :
-      trVal.append([10*int(100*track.eta())+track.phi(), "ori", track.eta(), track.phi(), track.pt(),  track.numberOfValidHits() , track.hitPattern().numberOfValidPixelHits(), track.ndof(),track.chi2(), track.algo()-4,track.originalAlgo()-4,track.quality(track.qualityByName("highPurity"))])
+     trVal.append([10*int(100*track.eta())+track.phi(), "ori", track.eta(), track.phi(), track.pt(),  track.numberOfValidHits() , track.hitPattern().numberOfValidPixelHits(), track.ndof(),track.chi2(), track.algo()-4,track.originalAlgo()-4,track.quality(track.qualityByName("highPurity")),track.quality(track.qualityByName("confirmed"))])
 
   for tr in trVal :
-     if(tr[9]!=tr[10]) : print tr
-  
-       
+     if(tr[9]==9 or tr[9]==10) :
+       nmu+=1
+       if(tr[10]==9 or tr[10]==10) : 
+          nmuOnly+=1
+       if(not tr[12]) : nmuNotConf+=1       
+
+print nmu,nmuOnly,nmuNotConf
           
