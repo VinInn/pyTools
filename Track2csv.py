@@ -9,7 +9,7 @@ fname='step3'
 csvfile = open(fname+'.csv','wb')
 writer = csv.writer(csvfile)
 
-writer.writerow(['ev','eta','phi','pt','nhits','npixels','3DLayers', 'dof','chi2','mva','algo','orialgo','hp','conf','mcfrac'])
+writer.writerow(['ev','eta','phi','pt','nhits','npixels','3DLayers', 'dof','chi2','mva','algo','orialgo','algoMask','hp','conf','mcfrac'])
 
 eventsRef = Events(fname+'.root')
 
@@ -44,5 +44,6 @@ for i in range(0, eventsRef.size()):
                    track.numberOfValidHits(), track.hitPattern().numberOfValidPixelHits(),  
                    track.hitPattern().pixelLayersWithMeasurement()+track.hitPattern().numberOfValidStripLayersWithMonoAndStereo(), 
                    track.ndof(), track.chi2(), mva.get(k), 
-#                   track.algo()-4,track.originalAlgo()-4,track.quality(track.qualityByName("highPurity")),track.quality(track.qualityByName("confirmed")),mcMatch[k] ])
-                   track.algo()-4,track.algo()-4,track.quality(track.qualityByName("highPurity")),track.quality(track.qualityByName("confirmed")),mcMatch[k] ])
+                   track.algo()-4,track.originalAlgo()-4, track.algoMask().to_ullong()>>4,
+                   track.quality(track.qualityByName("highPurity")),track.quality(track.qualityByName("confirmed")),mcMatch[k] ])
+#                   track.algo()-4,track.algo()-4,track.quality(track.qualityByName("highPurity")),track.quality(track.qualityByName("confirmed")),mcMatch[k] ])
