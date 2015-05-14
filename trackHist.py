@@ -17,7 +17,9 @@ def find_lt(a, x):
     raise ValueError
 
 
-cvsF = open('/Users/innocent/data/mva/ttbar.csv')
+# cvsF = open('/Users/innocent/data/mva/ttbar.csv')
+cvsF = open('/Users/innocent/data/mva/ttbarNewMVA.csv')
+
 
 vtuple = csv.reader(cvsF)
 header =  vtuple.next()
@@ -81,8 +83,10 @@ ntot=0
 
 chi2H = fRate()
 n3dH = fRate()
+algoH = fRate()
 mvaHpt = multiPlot([0.25,.5,2.,4.],'pt')
 mvaH3d = multiPlot([1.1,2.1,3.1,4.1,6.1],'3d')
+mvaHal = multiPlot([0.1,1.1,2.1,3.1,4.1,5.1,6.1],'algo')
 
 
 while True:
@@ -94,8 +98,10 @@ while True:
       chi2H.fill(float(values[chi2])/float(values[dof]),abs(float(values[mcfrac]))<0.5)
     # if float(values[pt]) >2 :
     n3dH.fill(float(values[n3d])+0.5, abs(float(values[mcfrac]))<0.5)
+    algoH.fill(float(values[algo])+0.5, abs(float(values[mcfrac]))<0.5)
     mvaHpt.fill(float(values[mva]),float(values[pt]),abs(float(values[mcfrac]))<0.5)
     mvaH3d.fill(float(values[mva]),float(values[n3d]),abs(float(values[mcfrac]))<0.5)
+    mvaHal.fill(float(values[mva]),float(values[algo]),abs(float(values[mcfrac]))<0.5)
 
 
 print ntot
@@ -103,14 +109,22 @@ y,x = chi2H.ratio(bins=np.linspace(0, 40, 81))
 print x
 print y
 plt.step(x,y,where='post')
+plt.grid(True)
 plt.show()
 
 y,x = n3dH.ratio(bins=np.linspace(0., 12., 13))
 print x
 print y
 plt.step(x,y,where='post')
+plt.grid(True)
 plt.show()
 
+y,x = algoH.ratio(bins=np.linspace(0., 12., 13))
+print x
+print y
+plt.step(x,y,where='post')
+plt.grid(True)
+plt.show()
 
 
 mvaHpt.plot(bins=np.linspace(-1, 1,26))
@@ -123,3 +137,11 @@ mvaH3d.plot(bins=np.linspace(-1, 1,26,endpoint=False))
 plt.grid(True)
 plt.legend(loc='upper right')
 plt.show()
+
+mvaHal.plot(bins=np.linspace(-1, 1,26,endpoint=False))
+plt.grid(True)
+plt.legend(loc='upper right')
+plt.show()
+
+
+
