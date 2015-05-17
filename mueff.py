@@ -99,13 +99,14 @@ nhp=0
 n10=0
 ne=0
 npx=0
+n10ori=0
 while True:
     try :
         values = vtuple.next()
     except : break
     ntot+=1
     if float(values[mcfrac])<0.5 : continue
-#    if (not testAlgo(values,10)) : continue
+    if (not testAlgo(values,10)) : continue
 
     fillAll(values)
 #    if earlyAlgo(values)==0 : print values
@@ -125,15 +126,20 @@ while True:
     if (testAlgo(values,9)) : n9+=1
     if earlyAlgo(values) : ne+=1
     if promptAlgo(values) : npx+=1
+    if (int(values[oriAlgo])==10) : n10ori+=1
     fill(npixH,values,npixels)
     fill(n3dH,values,n3d)
     
 
-print ntot,nmu,nmuhp,n9all,neall,n10,nhp,n9,ne,npx
+print ntot,nmu,nmuhp,n9all,neall,n10,nhp,n9,ne,npx,n10-ne,n10ori
 
 allAlgoH /=(0.01*float(nmu))
 print oriAlgoH
 print allAlgoH
+
+
+plt.style.use('fivethirtyeight') # 'ggplot')
+
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
@@ -152,6 +158,8 @@ ax.set_title(sample,fontsize=20, fontweight='bold')
 plt.grid(True,which='both')
 #plt.legend(loc='upper right')
 plt.show()
+
+# savefig('algotable.png')
 
 
 plt.step(algoX,algoH,where='post',label='final algo', linewidth=2)
