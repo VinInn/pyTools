@@ -9,7 +9,7 @@ fname='step3'
 csvfile = open(fname+'.csv','wb')
 writer = csv.writer(csvfile)
 
-writer.writerow(['ev','eta','phi','pt','nhits','npixels','3DLayers', 'dof','chi2','mva','algo','orialgo','algoMask','hp','conf','mcfrac'])
+writer.writerow(['ev','eta','phi','pt','nhits','npixels','Layers','3DLayers', 'missingLayers','dof','chi2','mva','algo','orialgo','algoMask','hp','conf','mcfrac'])
 
 eventsRef = Events(fname+'.root')
 
@@ -20,7 +20,7 @@ quality = "highPurity"
 #quality = "loose"
 
 
-mvaRef = Handle("edm::ValueMap<float>")
+mvaRef = Handle("std::vector<float>")
 mcMatchRef = Handle("std::vector<float>")
 
 for i in range(0, eventsRef.size()):
@@ -28,7 +28,7 @@ for i in range(0, eventsRef.size()):
   a= eventsRef.to(i)
   print "Event", i 
   a=eventsRef.getByLabel(label, tracksRef)
-  a=eventsRef.getByLabel(label, 'MVAVals',mvaRef)
+  a=eventsRef.getByLabel(label, 'MVAValues',mvaRef)
   a=eventsRef.getByLabel("trackMCQuality",mcMatchRef)
   mcMatch = mcMatchRef.product()
   mva = mvaRef.product() 
@@ -41,9 +41,11 @@ for i in range(0, eventsRef.size()):
 #   if (track.pt()<4) : continue
 #   if (track.quality(track.qualityByName(quality))) :
    writer.writerow([i,track.eta(), track.phi(), track.pt(),  
-                   track.numberOfValidHits(), track.hitPattern().numberOfValidPixelHits(),  
-                   track.hitPattern().pixelLayersWithMeasurement()+track.hitPattern().numberOfValidStripLayersWithMonoAndStereo(), 
-                   track.ndof(), track.chi2(), mva.get(k), 
+                   track.numberOfValidHits(), track.hitPattern().numberOfValidPixelHits(),
+                   track.hitPattern().trackerLayersWithMeasurement(),
+                   track.hitPattern().pixelLayersWithMeasurement()+track.hitPattern().numberOfValidStripLayersWithMonoAndStereo(),
+                   track.hitPattern().trackerLayersWithoutMeasurement(0),
+                   track.ndof(), track.chi2(), mva[k], 
                    track.algo()-4,track.originalAlgo()-4, track.algoMask().to_ullong()>>4,
                    track.quality(track.qualityByName("highPurity")),track.quality(track.qualityByName("confirmed")),mcMatch[k] ])
 #                   track.algo()-4,track.algo()-4,track.quality(track.qualityByName("highPurity")),track.quality(track.qualityByName("confirmed")),mcMatch[k] ])
