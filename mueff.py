@@ -37,12 +37,12 @@ def bitCount(int_type):
 
 
 
-sample= r'$t \bar t$ + 35PU 25ns'
-cvsF = open('/Users/innocent/data/mva/ttbar.csv')
+#sample= r'$t \bar t$ + 35PU 25ns'
+#cvsF = open('/Users/innocent/data/mva/ttbar.csv')
 #cvsF = open('/Users/innocent/data/mva/r74x.csv')
 
-# sample= r'boosted $J\psi$ gun + 35PU 25ns'
-#cvsF = open('/Users/innocent/data/mva/jpsi.csv')
+sample= r'boosted $J\psi$ gun + 35PU 25ns'
+cvsF = open('/Users/innocent/data/mva/jpsi.csv')
 
 
 vtuple = csv.reader(cvsF)
@@ -124,14 +124,14 @@ while True:
         values = vtuple.next()
     except : break
     ntot+=1
-    if abs(float(values[mcfrac]))>0.5 : continue
+    if abs(float(values[mcfrac]))<0.5 : continue
     # if (not testAlgo(values,10)) : continue
     nmu+=1
     if (not str2bool(values[hp])) : continue
     nmuhp+=1
 
     fillAll(values)
-#    if earlyAlgo(values)==0 : print values
+    if earlyAlgo(values)==0 : print values
     if (str2bool(values[hp])) :
       algoH[int(values[algo])]+=1
       oriAlgoH[int(values[oriAlgo])]+=1
@@ -152,6 +152,7 @@ while True:
         fill(etaH,values,eta)
     
 
+print 'ntot,nmu,nmuhp,n9all,neall,n10,nhp,n9,ne,npx,n10-ne,n10ori'
 print ntot,nmu,nmuhp,n9all,neall,n10,nhp,n9,ne,npx,n10-ne,n10ori
 
 allAlgoH /=(0.01*float(nmuhp))
