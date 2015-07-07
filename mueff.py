@@ -37,11 +37,12 @@ def bitCount(int_type):
 
 
 
-#sample= r'$t \bar t$ + 35PU 25ns'
-#cvsF = open('/Users/innocent/data/mva/ttbar.csv')
+sample= r'$t \bar t$ + 35PU 25ns'
+cvsF = open('/Users/innocent/data/mva/ttbar.csv')
+#cvsF = open('/Users/innocent/data/mva/r74x.csv')
 
-sample= r'boosted $J\psi$ gun + 35PU 25ns'
-cvsF = open('/Users/innocent/data/mva/jpsi.csv')
+# sample= r'boosted $J\psi$ gun + 35PU 25ns'
+#cvsF = open('/Users/innocent/data/mva/jpsi.csv')
 
 
 vtuple = csv.reader(cvsF)
@@ -123,7 +124,7 @@ while True:
         values = vtuple.next()
     except : break
     ntot+=1
-    if float(values[mcfrac])<0.5 : continue
+    if abs(float(values[mcfrac]))>0.5 : continue
     # if (not testAlgo(values,10)) : continue
     nmu+=1
     if (not str2bool(values[hp])) : continue
