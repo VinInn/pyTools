@@ -41,7 +41,8 @@ for i in range(0, eventsRef.size()):
 
   print tracksRef.product().size(), len(trVal)
   for tr in trVal :
-     if (tr[12].count()<1) : print tr
+     print tr
+     #if (tr[12].count()<1) : print tr
      if (tr[13]) :
        nhp+=1
        if (tr[12].count()>1) :
