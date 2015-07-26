@@ -3,14 +3,18 @@ from ROOT import gROOT, gStyle, TCanvas, TF1, TFile, TTree, gRandom, TH1F, TH2F
 import os
 import csv
 
-fname= 'run251561'
+def format(x) :
+  return '{:.2f}'.format(x)
+
+
+fname= 'run251561New3'
 #'inefficientMuons'
 
 
 csvfile = open(fname+'.csv','wb')
 writer = csv.writer(csvfile)
 
-writer.writerow(['ev','eta','phi','pt','nhits','npixels','Layers','3DLayers', 'missingLayers','dof','chi2','mva','algo','orialgo','algoMask','hp','conf','mcfrac'])
+writer.writerow(['ev','eta','phi','pt','nhits','npixels','pixLayers', 'firstBPix', 'firstFPix', 'Layers','3DLayers', 'missingLayers','dof','chi2','mva','algo','orialgo','algoMask','hp','conf','mcfrac'])
 
 eventsRef = Events(fname+'.root')
 
@@ -27,7 +31,9 @@ mcMatchRef = Handle("std::vector<float>")
 for i in range(0, eventsRef.size()):
 #for i in range(0, 200):
   a= eventsRef.to(i)
-  print "Event", i 
+  id = eventsRef.object().id()
+  evid = '{:d}:{:d}:{:d}'.format(int(id.run()),int(id.luminosityBlock()), int(id.event()))
+  print "Event", i , evid
   a=eventsRef.getByLabel(label, tracksRef)
 #  a=eventsRef.getByLabel(label, 'MVAValues',mvaRef)
   a=eventsRef.getByLabel("trackMCQuality",mcMatchRef)
@@ -42,12 +48,13 @@ for i in range(0, eventsRef.size()):
 #   if (track.pt()<4) : continue
 #   if (track.quality(track.qualityByName(quality))) :
    if (track.algoMask().test(14)):
-    writer.writerow([i,track.eta(), track.phi(), track.pt(),  
-                   track.numberOfValidHits(), track.hitPattern().numberOfValidPixelHits(),
+    writer.writerow([evid,format(track.eta()), format(track.phi()), format(track.pt()),  
+                   track.numberOfValidHits(), track.hitPattern().numberOfValidPixelHits(),  track.hitPattern().pixelLayersWithMeasurement(), 
+                   track.hitPattern().hasValidHitInFirstPixelBarrel(),track.hitPattern().hasValidHitInFirstPixelEndcap(),
                    track.hitPattern().trackerLayersWithMeasurement(),
                    track.hitPattern().pixelLayersWithMeasurement()+track.hitPattern().numberOfValidStripLayersWithMonoAndStereo(),
                    track.hitPattern().trackerLayersWithoutMeasurement(0),
-                   track.ndof(), track.chi2(), 1., # mva[k], 
+                   track.ndof(), format(track.chi2()), 1., # mva[k], 
                    track.algo()-4,track.originalAlgo()-4, track.algoMask().to_ullong()>>4,
                    track.quality(track.qualityByName("highPurity")),track.quality(track.qualityByName("confirmed")),1 ])
 #                   track.algo()-4,track.algo()-4,track.quality(track.qualityByName("highPurity")),track.quality(track.qualityByName("confirmed")),mcMatch[k] ])
