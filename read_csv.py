@@ -1,3 +1,9 @@
+"""
+ploat the data in a file
+usage
+edit last lines to hardwire column numbers
+pyhton read_cvs.py filename
+"""
 import sys
 import matplotlib as mpl
 import numpy as np
