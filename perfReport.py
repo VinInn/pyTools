@@ -1,6 +1,6 @@
 d = {}
-ori= 'perfStat_ori.txt'
-pgo = 'perfStat_pgo.txt'
+ori= 'hltPerf_ori.txt'
+pgo = 'hltPerf_pgo.txt'
 with open(ori) as f:
     for line in f:
        (val, key) = line.split()

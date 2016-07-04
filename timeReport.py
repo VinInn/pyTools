@@ -1,6 +1,6 @@
 d = {}
-ori= 'timeOri.txt'
-pgo = 'timePGO.txt'
+ori= 'hltTime_ori81.txt'
+pgo = 'hltTime_pgo81.txt'
 with open(ori) as f:
     for line in f:
        (val, key) = line.split()
@@ -14,12 +14,12 @@ with open(pgo) as f:
        d[key][1] = float(val)
 
 # print d
-#for k,c in d.iteritems() :
-#  if(c[0]>0) :
-#    print "{:10.7f}".format(c[0]),'|',k,'| ',"{:6.4f}".format(c[0]),'| ',"{:6.4f}".format(c[1]),'| ', "{:6.2f}".format(100*(c[0]-c[1])/c[0]),'||'
-
-
 for k,c in d.iteritems() :
-  if(c[0]>0.001) :
-    print "{:6.2f}".format(100*(c[0]-c[1])/c[0]),'|',k,'| ',"{:6.4f}".format(c[0]),'| ',"{:6.4f}".format(c[1]),'| ', "{:6.2f}".format(100*(c[0]-c[1])/c[0]),'||'
+  if(c[0]>0) :
+    print "{:10.7f}".format(c[0]),'|',k,'| ',"{:6.4f}".format(c[0]),'| ',"{:6.4f}".format(c[1]),'| ', "{:6.2f}".format(100*(c[0]-c[1])/c[0]),'||'
+
+
+#for k,c in d.iteritems() :
+#  if(c[0]>0.001) :
+#    print "{:6.2f}".format(100*(c[0]-c[1])/c[0]),'|',k,'| ',"{:6.4f}".format(c[0]),'| ',"{:6.4f}".format(c[1]),'| ', "{:6.2f}".format(100*(c[0]-c[1])/c[0]),'||'
 
