@@ -6,17 +6,17 @@ import csv
 def format(x) :
   return '{:.2f}'.format(x)
 
-
-fname= 'run251561New3'
+ver = 'ori'
+fname= 'chi2_'+ver
 #'inefficientMuons'
-
+# fname= 'run251561New3'
 
 csvfile = open(fname+'.csv','wb')
 writer = csv.writer(csvfile)
 
 writer.writerow(['ev','eta','phi','pt','nhits','npixels','pixLayers', 'firstBPix', 'firstFPix', 'Layers','3DLayers', 'missingLayers','dof','chi2','mva','algo','orialgo','algoMask','hp','conf','mcfrac'])
 
-eventsRef = Events(fname+'.root')
+eventsRef = Events('step3_'+ver+'.root')
 
 tracksRef = Handle("std::vector<reco::Track>")
 label = "generalTracks"
@@ -47,10 +47,10 @@ for i in range(0, eventsRef.size()):
 #   if (abs(track.eta())>2.3) : continue
 #   if (track.pt()<4) : continue
 #   if (track.quality(track.qualityByName(quality))) :
-   if (track.algoMask().test(14)):
-    writer.writerow([evid,format(track.eta()), format(track.phi()), format(track.pt()),  
+#   if (track.algoMask().test(14)):
+   writer.writerow([evid,format(track.eta()), format(track.phi()), format(track.pt()),  
                    track.numberOfValidHits(), track.hitPattern().numberOfValidPixelHits(),  track.hitPattern().pixelLayersWithMeasurement(), 
-                   track.hitPattern().hasValidHitInFirstPixelBarrel(),track.hitPattern().hasValidHitInFirstPixelEndcap(),
+                   track.hitPattern().hasValidHitInPixelLayer(1,1),track.hitPattern().hasValidHitInPixelLayer(2,1),
                    track.hitPattern().trackerLayersWithMeasurement(),
                    track.hitPattern().pixelLayersWithMeasurement()+track.hitPattern().numberOfValidStripLayersWithMonoAndStereo(),
                    track.hitPattern().trackerLayersWithoutMeasurement(0),
