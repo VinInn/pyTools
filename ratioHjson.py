@@ -1,22 +1,34 @@
 import json
-c = json.loads(open('L1_SingleMu25.htm').read())['hist']['bins']['content']
+c = json.loads(open('L1_SingleMu25_278957').read())['hist']['bins']['content']
 
-k1=0
-n1=0;
-for i in range(0, 150): 
-  if (c[i]) >10000 :
-    k1+=c[i]
-    n1+=1
+all=0
+nall=0
+ffb=0
+fb=0
+nfb=0
+lb=0;
+nlb=0
+for i in range(0, 3490): 
+  if (c[i]) >1000 :
+    ffb+=c[i]
+    break
 
-k2=0
-n2=0;
-for i in range(2000, 3500): 
-  if (c[i]) >10000 :
-    k2+=c[i]
-    n2+=1
+for i in range(0, 3500): 
+  if (c[i]) >1000 :
+    all+=c[i]
+    nall+=1
 
-r1 = float(k1)/float(n1)
-r2 = float(k2)/float(n2)
+for i in range(0, 3499):
+  if c[i] >1000 and c[i+1]<1000 :
+    nlb+=1
+    lb+=c[i]
+  if c[i] < 1000 and c[i+1]>1000 :
+    nfb+=1
+    fb+=c[i+1]
 
-print r1,r2
+
+print nall,nlb,nfb
+la = all/float(nall)
+print all/float(nall), ffb, fb/float(nfb),lb/float(nlb)
+print ffb/la, fb/float(nfb)/la,lb/float(nlb)/la
 
