@@ -1,9 +1,18 @@
 
 # grep -A20 "CPUs utilized" perfHWS6.log | awk '{print $1,$2}'
-import math
 d = {}
 files = []
-files.append('simperfHSW6.log')
+files.append('tkperfHSW.counts')
+files.append('simperfHSW6.counts')
+files.append('simperfHSW.counts')
+files.append('perfHWS6.counts')
+files.append('perfHWS.counts')
+
+files.append('tkperfIVB.counts')
+files.append('simperfIVB6.counts')
+files.append('simperfIVB.counts')
+files.append('perfIV6.counts')
+files.append('perfIV.counts')
 
 
 
@@ -11,15 +20,11 @@ def parseCounts(fname):
     d = {}
     with open(fname) as f:
         for line in f:
-            a = line.split()
-            if len(a)>2 :
-                (val, key, hash) = a[0:3]
-                # print val, key
-                if hash == '#' :
-                   d[key] = float(val)
-    norm = math.pow(10.,-int(math.log10(d['cycles'])-4))
+            (val, key) = line.split()
+            d[key] = float(val)
+    cycles = d['cycles']
     for k,v, in d.iteritems() :
-        d[k] = v*norm
+        d[k] = v/cycles
     return d
 
 print '| | Hashwell ||||| IvyBridge |||||'
