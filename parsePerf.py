@@ -3,8 +3,9 @@
 import math
 d = {}
 files = []
-files.append('simperfHSW6.log')
-
+files.append('seedTripESKL.log')
+files.append('seedCASKL.log')
+ref = 'seedNoSKL.log'
 
 
 def parseCounts(fname):
@@ -17,23 +18,59 @@ def parseCounts(fname):
                 # print val, key
                 if hash == '#' :
                    d[key] = float(val)
-    norm = math.pow(10.,-int(math.log10(d['cycles'])-4))
-    for k,v, in d.iteritems() :
-        d[k] = v*norm
     return d
 
-print '| | Hashwell ||||| IvyBridge |||||'
-print '| | !CMS tkreco 6 | !CMS sim 6 | !CMS sim 1 | !HSPEC 6 |!HSPEC 1 | !CMS tkreco 6 | !CMS sim 6 | !CMS sim 1 | !HSPEC 6 |!HSPEC 1 ||'  
-# print d
+def norm(d) :
+    return math.pow(10.,-int(math.log10(d['cycles'])-4))
+
+def normalize(d, norm) :
+    for k,v, in d.iteritems() :
+        d[k] = v*norm
+
+def printAbs(d) :
+    n = norm(d[0])
+    for v in d :
+        normalize(v,n)
+        
+    for k,c in d[0].iteritems() :
+        s = '|' + k 
+        for v in d :
+            if not k in v : v[k] = 0.
+            s+= ' | ' + "{:6.4f}".format(v[k])
+        s += ' ||'
+        print s
+
+def printRel(d) :
+    print '| | relative |||'
+    n = norm(d[0])
+    for v in d :
+        n = 1./v['cycles']
+        normalize(v,n)
+        
+    for k,c in d[0].iteritems() :
+        s = '|' + k 
+        for v in d :
+            if not k in v : v[k] = 0.
+            s+= ' | ' + "{:6.4f}".format(v[k])
+        s += ' ||'
+        print s
+
+
+#print '| | Hashwell ||||| IvyBridge |||||'
+print '| | !TriplExt | !CA ||'
 d =[]
 for f in files:
     d.append(parseCounts(f))
 
-for k,c in d[0].iteritems() :
-    s = '|' + k + ' | '
-    for v in d :
+refd = parseCounts(ref)
+
+for k,c in refd.iteritems() :
+    for v in d:
         if not k in v : v[k] = 0.
-        s+= "{:6.4f}".format(v[k])  + ' |'
-    s += '|'
-    print s
+        v[k]-=c
+
+
+# printAbs(d)
+
+printRel(d)
 
