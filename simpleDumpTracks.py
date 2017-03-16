@@ -17,9 +17,11 @@ import os
 #eventsRef = Events('badEvent4fb_reco_81X.root')
 #ver ="ncl"
 #eventsRef = Events('badEvent4fb_reco_ncl.root')
-ver ="HiM"
-eventsRef = Events('badEvent4fb_reco_HM.root')
-
+#ver ="HiM"
+#eventsRef = Events('badEvent4fb_reco_HM.root')
+eventsRef = Events('/afs/cern.ch/user/l/lanyov/cmsonly/rereco_278509_856_1394197760.root')
+#ver = "PROMPT"
+ver = "REREC"
 
 tracksRef = Handle("std::vector<reco::Track>")
 label = "generalTracks"
@@ -42,9 +44,9 @@ for i in range(0, eventsRef.size()):
   for track in tracksRef.product():
 #   if (track.phi()<0) : continue
 #   if (track.eta()<0) : continue
-    if (track.pt()<200) : continue
-    if (track.qoverpError()*track.p()>2) : continue
-    if (not track.quality(track.qualityByName(quality))) : continue
+    if (track.pt()<1) : continue
+#    if (track.qoverpError()*track.p()>2) : continue
+#    if (not track.quality(track.qualityByName(quality))) : continue
 #    pattern = track.hitPattern()
 #    if (pattern.numberOfValidHits() != (pattern.numberOfValidPixelHits()+pattern.numberOfValidStripHits())) :
 #      print pattern.numberOfValidHits(),pattern.numberOfValidPixelHits(),pattern.numberOfValidStripHits(), pattern.numberOfValidPixelHits()+pattern.numberOfValidStripHits()
