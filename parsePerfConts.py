@@ -1,5 +1,6 @@
 
 # grep -A20 "CPUs utilized" perfHWS6.log | awk '{print $1,$2}'
+grep -A29 "CPUs utilized" scimark2BW.log
 d = {}
 files = []
 files.append('tkperfHSW.counts')
