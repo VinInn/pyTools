@@ -26,6 +26,7 @@ import sys
 import random
 import urllib
 import multiprocessing
+import numpy as np
 
 version = '00.03 DB12'
 
@@ -35,13 +36,13 @@ def singleDiracBenchmark( iterations = 1, extraIteration = False ):
 
   # This number of iterations corresponds to 1kHS2k.seconds, i.e. 250 HS06 seconds
 
-  n = int( 1000 * 1000 * 12.5 )
+  n = int(1000 * 12.5 )
   calib = 250.0
 
-  m = long( 0 )
-  m2 = long( 0 )
-  p = 0
-  p2 = 0
+  m = 0. 
+  m2 = 0.
+  p = 0.
+  p2 = 0.
   # Do one iteration extra to allow CPUs with variable speed (we ignore zeroth iteration)
   # Possibly do one extra iteration to avoid tail effects when copies run in parallel
   for i in range( iterations + 1 + (2 if extraIteration else 0)):
@@ -50,11 +51,11 @@ def singleDiracBenchmark( iterations = 1, extraIteration = False ):
 
     # Now the iterations
     for _j in xrange( n ):
-      t = random.normalvariate( 10, 1 )
-      m += t
-      m2 += t * t
-      p += t
-      p2 += t * t
+      t = np.random.normal(10, 1, 1000)
+      m += np.sum(t)
+      m2 += np.sum(t * t)
+      p += np.sum(t)
+      p2 += np.sum(t * t)
 
     if i == iterations:
       end = os.times()
