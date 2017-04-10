@@ -204,7 +204,7 @@ DIRACbenchmark.py is distributed from  https://github.com/DIRACGrid/DB12
     elif not arg.startswith('--'):
       copies = arg
 
-  print iterations, copies
+  # print iterations, copies
 
   if copies == 'version':
     print version
