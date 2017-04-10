@@ -35,9 +35,11 @@ def singleDiracBenchmark( iterations = 1, extraIteration = False ):
   """
 
   # This number of iterations corresponds to 1kHS2k.seconds, i.e. 250 HS06 seconds
+  # modified to normalize to HS06 on Intel(R) Xeon(R) CPU E5-2630 v4
+  # running 10 threads on a single node
 
   n = int(1000 * 12.5 )
-  calib = 250.0
+  calib = 19.11
 
   m = 0. 
   m2 = 0.
