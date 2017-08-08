@@ -1,7 +1,7 @@
 
 # grep -A29 "CPUs utilized" scimark2BW.log | awk '{print $1,$2}' | sed 's/,//g' | sed 's/.//g'
 
-fname = "perfDb12hssimtk.counts"
+fname = "luPerf.counts"
 
 def parseCountsNC(fname):
     d = {}
