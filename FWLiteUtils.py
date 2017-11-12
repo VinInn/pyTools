@@ -49,9 +49,12 @@ class Mini :
     self.vertices = (Handle("vector<reco::Vertex>"),"offlineSlimmedPrimaryVertices") 
     self.cand = (Handle("vector<pat::PackedCandidate>") ,"packedPFCandidates")
     self.ltk =	(Handle("vector<pat::PackedCandidate>") ,"lostTracks" )
+    self.triggerBits = (Handle("edm::TriggerResults"), ("TriggerResults","","HLT"))
 
   def set(self,ev) :
     for m in inspect.getmembers(self, lambda x : not inspect.ismethod(x)) :
        if (m[0][0]!='_') : a=ev.getByLabel(m[1][1],m[1][0])
 
 
+  def ilumi() :
+    return self.lumi.product()[0].instantLumi() if not lumi.product().empty() else 0
