@@ -56,5 +56,15 @@ class Mini :
        if (m[0][0]!='_') : a=ev.getByLabel(m[1][1],m[1][0])
 
 
-  def ilumi() :
-    return self.lumi.product()[0].instantLumi() if not lumi.product().empty() else 0
+  def ilumi(self) :
+    return self.lumi[0].product()[0].instantLumi() if not self.lumi[0].product().empty() else 0
+
+  def zbIndex(self,ev) :
+     ti=[]
+     names = ev.object().triggerNames(self.triggerBits[0].product())
+     t1 = 'HLT_ZeroBias_v'
+     t2 = 'HLT_ZeroBias_part'
+     for i in xrange(self.triggerBits[0].product().size()):
+       x = names.triggerName(i)
+       if x[:len(t1)]==t1 or x[:len(t2)]==t2 : ti.append(i)
+     return ti
