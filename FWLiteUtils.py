@@ -1,6 +1,14 @@
 from DataFormats.FWLite import Handle, Events
 from bisect import bisect_left, bisect_right
 import inspect
+import subprocess
+
+def accumul(lis):
+    total = 0
+    for x in lis:
+        total += x
+        yield total
+
 
 #file prefixes
 xrd = 'root://cms-xrd-global.cern.ch//'
@@ -10,6 +18,18 @@ myTracking = 'root://eoscms.cern.ch///store/group/phys_tracking/vincenzo/run2017
 
 def fullFileName(prefix,files) :
     return map(lambda x : prefix+x,files)
+
+def eventsInLumis(f) :
+   output = subprocess.check_output(['edmFileUtil', '--eventsInLumis',f])
+   lines = output.split('\n')[4:]
+   ls = []
+   ev = []
+   for l in lines :
+     if len(l)<4 : continue
+     ls.append(int(l.split()[1]))
+     ev.append(int(l.split()[2]))
+   ev = [0]+list(accumul(ev))
+   return (ls,ev)
 
 def runid(event,lumi) :
     id = event.object().id()
@@ -26,8 +46,9 @@ def skip2Lumi(events,ls):
 
 class Lumi:
 
-    def __init__(self,ev):
+    def __init__(self,f,ev):
         self.events = ev
+        self.ls, self.ix = eventsInLumis(f)
 
     def __getitem__(self,i):
         a = self.events.to(i)
@@ -36,10 +57,12 @@ class Lumi:
     def __len__(self):
         return int(self.events.size())
 
-def eventsInLumiRange(ev,l,h):
-   ls = Lumi(ev)
-   il = bisect_left(ls,l)
-   return (il,bisect_right(ls,h,il))
+def eventsInLumiRange(f, ev,l,h):
+   lm = Lumi(f,ev)
+   ils = []
+   for i in range(0,len(lm.ls)) :
+      if lm.ls[i]>= l and lm.ls[i]<=h : ils.append((lm.ix[i],lm.ix[i+1]))
+   return ils
 
 
 class Mini :
