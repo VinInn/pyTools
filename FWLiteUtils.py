@@ -31,11 +31,14 @@ def eventsInLumis(f) :
    ev = [0]+list(accumul(ev))
    return (ls,ev)
 
+def ilumi(event,lumi) :
+    a=event.getByLabel('scalersRawToDigi', lumi)
+    return lumi.product()[0].instantLumi() if not lumi.product().empty() else 0
+
 def runid(event,lumi) :
     id = event.object().id()
-    a=event.getByLabel('scalersRawToDigi', lumi)
-    return '{:d}:{:d}:{:.2e}'.format(int(id.run()),int(id.luminosityBlock()),\
-                                     lumi.product()[0].instantLumi() if not lumi.product().empty() else 0)
+    return '{:d}:{:d}:{:.2e}'.format(int(id.run()),int(id.luminosityBlock()),float(lumi))
+
 def skip2Lumi(events,ls):
     for i in range(0,events.size()):
         a= events.to(i)
@@ -73,6 +76,7 @@ class Mini :
     self.cand = (Handle("vector<pat::PackedCandidate>") ,"packedPFCandidates")
     self.ltk =	(Handle("vector<pat::PackedCandidate>") ,"lostTracks" )
     self.triggerBits = (Handle("edm::TriggerResults"), ("TriggerResults","","HLT"))
+    self.puInfo = (Handle("vector<PileupSummaryInfo>"), "slimmedAddPileupInfo")
 
   def set(self,ev) :
     for m in inspect.getmembers(self, lambda x : not inspect.ismethod(x)) :
@@ -81,6 +85,11 @@ class Mini :
 
   def ilumi(self) :
     return self.lumi[0].product()[0].instantLumi() if not self.lumi[0].product().empty() else 0
+
+  def pu(self) :
+   for bx in self.puInfo[0].product() :
+      if bx.getBunchCrossing()==0 : return bx.getTrueNumInteractions()
+   return 0
 
   def zbIndex(self,ev) :
      ti=[]
