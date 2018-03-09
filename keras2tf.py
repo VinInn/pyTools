@@ -1,3 +1,5 @@
+#!/usr/bin/env python 
+
 # coding: utf-8
 
 # In[ ]:
@@ -109,6 +111,9 @@ except ValueError as err:
     Check the keras documentation for more details (https://keras.io/getting-started/faq/)'''
           .format(weight_file_path))
     raise err
+
+net_model.summary()
+
 num_output = args.num_outputs
 pred = [None]*num_output
 pred_node_names = [None]*num_output
