@@ -23,9 +23,9 @@ def parseCountsNC(fname):
         for line in f:
             (val, key) = line.split()
             d[key] = float(val)
-    cycles = d['cycles']
+    den = d['cycles']
     for k,v, in d.iteritems() :
-        d[k] = v/cycles
+        d[k] = v/den
     return d
 
 def parseCountsNI(fname):
@@ -36,7 +36,7 @@ def parseCountsNI(fname):
             d[key] = float(val)
     cycles = d['instructions']
     for k,v, in d.iteritems() :
-        d[k] = v/cycles
+        d[k] = v/den
     return d
 
 
