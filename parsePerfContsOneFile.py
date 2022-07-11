@@ -6,14 +6,21 @@ def parseCountsNorm(di,denName):
     do = {}
     for wf in di :
       den = di[wf][denName]
+      if (denName=='seconds') : den*=1000.*1000.*1000.
       for k in di[wf] :
-        if not k in do : do[k] = {}
-        do[k][wf] = di[wf][k]/den
+        ko = k
+        if (k=='msec') :
+          ko='nsec'
+        if(k=='seconds') : ko='wall-clock-ns'
+        if not ko in do : do[ko] = {}
+        do[ko][wf] = di[wf][k]/den
+        if (ko=='nsec') :  do[ko][wf]*=1000.*1000.
+        if (ko=='wall-clock-ns') :  do[ko][wf]*=1000*1000.*1000.
     return do
 
 
 def doPrint(di) :
-  s = '\n|' + ' | '
+  s = '|' + ' | '
   for wf  in di['cycles'] :
     s+= ' ' + wf + ' |'
   s += '|'
@@ -28,34 +35,39 @@ def doPrint(di) :
 
 
 def parseOne(fname) :
-
+  nop=0
   d ={}
   with open(fname) as f:
+    print('\n\n---++ '+fname)
     for line in f:
       try:
         (wf, val, key) = line.split()
         d[wf] = {}
       except:
-        print("")      
+        nop+=1
   with open(fname) as f:
     for line in f:
       try:
         (wf, val, key) = line.split()
         d[wf][key]= float(val)
       except:
-        print("")
+        nop+=1
 #
   dc = parseCountsNorm(d,'cycles')
   di = parseCountsNorm(d,'instructions')
   ds = parseCountsNorm(d,'seconds')
 #
+  print('\n---+++ Normalized to Cycles')
   doPrint(dc)
+  print('\n---+++ Normalized to Instructions')
   doPrint(di)
+  print('\n---+++ Normalized to Wall-Clock (ns)')
   doPrint(ds)
 
 
 files = ["haswell.count","icelake.count","skylake.count"]
 
+print('---+ Deep Dive in HepSpec\n\n')
 for f in files:
   parseOne(f)
 
