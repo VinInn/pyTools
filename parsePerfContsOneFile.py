@@ -64,10 +64,19 @@ def parseOne(fname) :
   print('\n---+++ Normalized to Wall-Clock (ns)')
   doPrint(ds)
 
+dir = '/Users/innocent/cernbox/HepSpec/'
+files = [dir+"Haswell/haswell.count",dir+"Skylake/skylake.count",dir+"Icelake/icelake.count"]
 
-files = ["haswell.count","icelake.count","skylake.count"]
 
 print('---+ Deep Dive in HepSpec\n\n')
+
+print('---+ Single Process\n\n')
+for f in files:
+  parseOne(f)
+
+
+files = [dir+"Haswell/haswellFull.count",dir+"Skylake/skylakeFull.count",dir+"Icelake/icelakeFull.count"]
+print('\n\n---+ Full Machine\n\n')
 for f in files:
   parseOne(f)
 
